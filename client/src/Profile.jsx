@@ -27,19 +27,19 @@ export default function Profile() {
           </div>
         </div>
         <div className="profile-actions">
-          <h3>Subscribe</h3>
+          <h3>Follow</h3>
         </div>
         <div className="profile-options">
-          <div className="profile-options-add">
+          <Link to={""} className="profile-options-add">
             <i className="fas fa-pencil-alt"></i>
             Write a Story!
-          </div>
-          <div className="profile-options-settings">
+          </Link>
+          <Link to={""} className="profile-options-settings">
             <i className="fas fa-cog"></i>
             Account
-          </div>
+          </Link>
         </div>
-        
+
         <div className="profile-list">
           <div className="profile-list-inner">
             <div

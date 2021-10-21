@@ -34,6 +34,11 @@ body {
     box-sizing: border-box;
 }
 
+input,
+textarea {
+    font-family: 'Yaldevi', sans-serif;
+}
+
 button {
     background-color: transparent;
     border: none;

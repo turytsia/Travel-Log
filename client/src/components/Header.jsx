@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import background from "../images/back.jpg";
+import { Authorization } from "../App";
+
 export default function Header() {
   function moveBackgrount(e) {
     const wall = document.getElementById("wall");
@@ -17,17 +19,20 @@ export default function Header() {
       nav.style.backgroundColor = "transparent";
       for (let item of link) {
         item.style.color = "#fff";
-        nav.style.borderBottom = "1px solid #fff";
+        nav.style.borderBottom = "none";
       }
     }
   }
+  const user = useContext(Authorization);
   useEffect(() => {
     window.addEventListener("scroll", (e) => moveBackgrount(e));
-
+    console.log(user);
     return () => {
       window.removeEventListener("scroll", moveBackgrount);
     };
   });
+
+
   return (
     <>
       <div className="header-nav" id="nav">

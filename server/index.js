@@ -15,14 +15,15 @@ require("./dbConnect");
 const port = process.env.PORT || 5000;
 
 app.use(
+    "/",
     cors({
-        origin: "port",
+        origin: "http://localhost:3000",
         credentials: true,
     })
 );
 app.use(express.json());
 app.use(cookieParser());
-app.use(auth)
+app.use(auth);
 app.use("/api/blog", blogRouter);
 app.use("/api/auth", userRouter);
 
