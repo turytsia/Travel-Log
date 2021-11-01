@@ -1,48 +1,78 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import http from "../services.js";
+import moment from "moment";
 export default function Aside() {
-    return (
-        <aside className="main-aside">
-          <div className="main-aside-section">
-            <h3>Latest & new</h3>
-            <div className="main-aside-section-list">
-              <Link to={""} className="main-aside-section-list-item">
-                <h4>Title1</h4>
-                <span>by Name1</span>
+  const [blogs, setBlogs] = useState(null);
+  const tags = [
+    "Beach",
+    "Forest",
+    "Travel",
+    "Home",
+    "Cheap",
+    "Expensive",
+    "House",
+    "Apartment",
+  ];
+
+  async function getBlogs() {
+    try {
+      const { data } = await http.get("http://localhost:5000/api/blog/all");
+      setBlogs(data.blogs.slice(0, 3));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getBlogs();
+  });
+
+  return (
+    <aside className="aside">
+      <div className="aside-section">
+        <h3 className="aside-title">New & Hot</h3>
+        <div className="aside-list">
+          {blogs && blogs.length ? (
+            blogs.map((blog) => (
+              <Link
+                key={blog._id}
+                to={`/blog/${blog._id}`}
+                className="aside-list-item"
+              >
+                <h4 className="aside-list-title">{blog.title}</h4>
+                <span className="aside-list-item-text">
+                  {blog.body.slice(0, 50)}
+                </span>
+                <span className="aside-list-item-btn">
+                  {moment(blog.createdAt).fromNow()}
+                </span>
+                <div className="aside-list-item-info">
+                  <i className="fas fa-heart"></i>
+                  {blog.likes}
+                  <i className="fas fa-comment-dots"></i>
+                  {blog.comments.length}
+                </div>
               </Link>
-              <Link to={""} className="main-aside-section-list-item">
-                <h4>Title2</h4>
-                <span>by Name2</span>
-              </Link>
-              <Link to={""} className="main-aside-section-list-item">
-                <h4>Title3</h4>
-                <span>by Name3</span>
-              </Link>
-            </div>
-          </div>
-          <div className="main-aside-section">
-            <h3>Tags</h3>
-            <div className="main-aside-section-tags">
-              <Link to={""} className="main-aside-section-list-tag">
-                Tag1
-              </Link>
-              <Link to={""} className="main-aside-section-list-tag">
-                Tag3
-              </Link>
-              <Link to={""} className="main-aside-section-list-tag">
-                Tag4
-              </Link>
-              <Link to={""} className="main-aside-section-list-tag">
-                Tag5
-              </Link>
-              <Link to={""} className="main-aside-section-list-tag">
-                Tag6
-              </Link>
-            </div>
-          </div>
-          <div className="main-aside-support">
-            <Link to="">Help & Support</Link>
-          </div>
-        </aside>
-    )
+            ))
+          ) : (
+            <span className = "aside-warning">No posts yet</span>
+          )}
+        </div>
+      </div>
+      <div className="aside-section">
+        <h3 className="aside-title">Tags</h3>
+        <div className="aside-tags">
+          {tags.map((tag, i) => (
+            <Link to={""} key = {i} className="tag-item">
+              {tag}
+            </Link>
+          ))}
+        </div>
+      </div>
+      <div className="aside-support">
+        <Link to="">Help & Support</Link>
+      </div>
+    </aside>
+  );
 }

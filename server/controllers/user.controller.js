@@ -1,19 +1,36 @@
 const userModel = require("../models/user");
 
+module.exports.getUser = async function(req, res) {
+    try {
+        const id = req.params.id;
+        const user = await userModel.findById(id, "-password");
+        res.json({ success: true, user });
+    } catch (err) {
+        res.json({ success: false, message: err.message });
+    }
+};
+module.exports.getUsers = async function(req, res) {
+    try {
+        const users = await userModel.find();
+        res.json({ success: true, users });
+    } catch (err) {
+        res.json({ success: false, message: err.message });
+    }
+};
 module.exports.Follow = async function(req, res) {
     //the code below needs to be optimized
     try {
         if (!req.user) throw new Error("Unauthorized");
         const userID = req.params.id;
-        const currentUser = await userModel.findById(req.user.id);
-        const user = await userModel.findById(userID);
+        const currentUser = await userModel.findById(req.user.id, "-password");
+        const user = await userModel.findById(userID, "-password");
         //!!!
         await currentUser.followUser(userID);
         await user.addFollower(currentUser._id);
         await currentUser.save();
         await user.save();
 
-        res.status(200).json({ success: true });
+        res.status(200).json({ success: true, user });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }

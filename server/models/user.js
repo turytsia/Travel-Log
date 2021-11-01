@@ -40,10 +40,10 @@ userSchema.methods.matchPasswords = async function(password) {
 userSchema.methods.likeBlog = async function(id) {
     if (!this.likes.includes(id)) {
         this.likes.push(id);
-        await blogModel.findByIdAndUpdate(blogID, { $inc: { likes: 1 } });
+        await blogModel.findByIdAndUpdate(id, { $inc: { likes: 1 } });
     } else {
         this.likes = this.likes.filter((like) => like !== id);
-        await blogModel.findByIdAndUpdate(blogID, { $inc: { likes: -1 } });
+        await blogModel.findByIdAndUpdate(id, { $inc: { likes: -1 } });
     }
     this.markModified("likes");
 };
@@ -61,7 +61,8 @@ userSchema.methods.addFollower = function(id) {
     if (!this.followers.includes(id)) {
         this.followers.push(id)
     } else {
-        this.followers = this.followers.filter((userID) => userID !== id);
+        this.followers = this.followers.filter((userID) => userID != id);
+
     }
     this.markModified("followers");
 }

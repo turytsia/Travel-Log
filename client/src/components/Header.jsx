@@ -4,16 +4,19 @@ import background from "../images/back.jpg";
 import { Authorization } from "../App";
 
 export default function Header() {
-  function moveBackgrount(e) {
+  function moveBackground(e) {
     const wall = document.getElementById("wall");
     const nav = document.getElementById("nav");
     const link = document.getElementsByClassName("header-link");
+    const ico = document.getElementById("user_ico");
+
     wall.style.transform = `translateY(${window.pageYOffset / 10}%)`;
     if (window.pageYOffset > 0) {
       nav.style.backgroundColor = "#fff";
       for (let item of link) {
         item.style.color = "#000";
         nav.style.borderBottom = "1px solid #000";
+        if (ico) ico.style.color = "#000";
       }
     } else {
       nav.style.backgroundColor = "transparent";
@@ -21,17 +24,18 @@ export default function Header() {
         item.style.color = "#fff";
         nav.style.borderBottom = "none";
       }
+      if (ico) ico.style.color = "#fff";
     }
   }
-  const user = useContext(Authorization);
+
+  const isAuthorized = useContext(Authorization);
+
   useEffect(() => {
-    window.addEventListener("scroll", (e) => moveBackgrount(e));
-    console.log(user);
+    window.addEventListener("scroll", (e) => moveBackground(e));
     return () => {
-      window.removeEventListener("scroll", moveBackgrount);
+      window.removeEventListener("scroll", moveBackground);
     };
   });
-
 
   return (
     <>
@@ -47,15 +51,15 @@ export default function Header() {
             <Link className="header-link" to={"/people"}>
               People
             </Link>
-            <Link className="header-link" to={"/categories"}>
-              Categories
-            </Link>
-            <Link className="header-link" to={"/"}>
-              FAQ
-            </Link>
-            <Link className="header-link" to={"/auth/register"}>
-              Sign In
-            </Link>
+            {isAuthorized ? (
+              <Link to={`/user/${isAuthorized._id}`}>
+                <i id="user_ico" className="fas fa-user"></i>
+              </Link>
+            ) : (
+              <Link className="header-link" to={"/auth/register"}>
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       </div>

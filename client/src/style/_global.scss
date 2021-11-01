@@ -1,3 +1,4 @@
+@import './colors';
 .wrapper {
     max-width: 1300px;
     margin: 0 auto;
@@ -39,8 +40,67 @@ textarea {
     font-family: 'Yaldevi', sans-serif;
 }
 
+p,
+pre {
+    font-family: 'Yaldevi', sans-serif;
+}
+
+.tag-item {
+    color: black;
+    padding: 5px 25px;
+    margin: 5px;
+    border: 1px solid rgba(black, 0.3);
+    background-color: rgba($black, 0.005);
+    border-radius: 14px;
+    transition: 0.1s;
+}
+
+.tag-item:hover {
+    background-color: rgba($black, 0.034);
+}
+
+.tag-item i {
+    padding-left: 5px;
+    color: $black;
+    cursor: pointer;
+}
+
 button {
     background-color: transparent;
     border: none;
     cursor: pointer;
 }
+
+.list {
+    border-top: 1px solid rgba($black, .2);
+    width: 80%;
+    margin-right: 10px;
+    &-warning {
+        display: block;
+        margin-top: 20px;
+        color: rgba($black, .3);
+    }
+    &-item {
+        margin: 13px auto;
+    }
+}
+
+//.loading {
+//     margin: 50px auto;
+//     height: 100px;
+//     width: 100px;
+// }
+// .loading i {
+//     color: $blue;
+//     font-size: 50px;
+//     animation: loadingAnimation 1s ease-in-out infinite;
+// }
+// @keyframes loadingAnimation {
+//     0% {
+//         transform: rotateZ(0deg);
+//     }
+//     100% {
+//         transform: rotateZ(360deg);
+//     }
+// }
+//

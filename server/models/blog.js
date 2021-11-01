@@ -5,7 +5,7 @@ const blogSchema = new Schema({
         required: true,
     },
     body: {
-        type: Array,
+        type: String,
         required: true,
     },
     category: String,
@@ -31,6 +31,11 @@ const blogSchema = new Schema({
         required: true,
     },
 });
+
+blogSchema.methods.Comment = function(comment) {
+    this.comments.push(comment);
+    this.markModified("comments");
+};
 
 const blogModel = model("blog", blogSchema);
 module.exports = blogModel;
