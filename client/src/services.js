@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: "https://algorithammer.herokuapp.com",
+    baseURL: "https://arcane-brushlands-47211.herokuapp.com/",
     withCredentials: true,
 });
