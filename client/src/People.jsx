@@ -25,7 +25,7 @@ function User({ user }) {
           className="people-item-ava"
           style={{
             backgroundImage: `url(${
-              user.ava ? `http://localhost:5000/api/image/${user.ava})` : ava
+              user.ava ? `/api/image/${user.ava})` : ava
             }`,
           }}
         ></div>
@@ -56,7 +56,7 @@ export default function People() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   async function getUsers() {
-    const { data } = await http.get("http://localhost:5000/api/auth/all");
+    const { data } = await http.get("/api/auth/all");
     if (data.success) setUsers(data.users);
   }
   useEffect(() => {

@@ -13,7 +13,7 @@ export default function Editor({ editMode, props }) {
   async function getBlog() {
     if (editMode && props) {
       const id = props.match.params.id;
-      const { data } = await http.get(`http://localhost:5000/api/blog/${id}`);
+      const { data } = await http.get(`/api/blog/${id}`);
       if (!data.success) return;
       setBody(data.blog.body);
       setTitle(data.blog.title);
@@ -26,7 +26,7 @@ export default function Editor({ editMode, props }) {
     if (editMode && props) {
       const id = props.match.params.id;
       const { data } = await http.patch(
-        `http://localhost:5000/api/blog/update/${id}`,
+        `/api/blog/update/${id}`,
         { title, body, tags, category }
       );
       if (!data.success) console.error(data);
@@ -46,7 +46,7 @@ export default function Editor({ editMode, props }) {
     fd.append("category", category);
     fd.append("tags", tags);
     const { data } = await http.post(
-      "http://localhost:5000/api/blog/create",
+      "/api/blog/create",
       fd
     );
     history.push("/");

@@ -15,19 +15,19 @@ export default function Profile({ props }) {
   const history = useHistory();
 
   async function signOut() {
-    const { data } = await http.get("http://localhost:5000/api/auth/logout");
+    const { data } = await http.get("/api/auth/logout");
     history.push("/");
   }
   async function getAuthorizedUser() {
-    const { data } = await http.get("http://localhost:5000/api/private");
+    const { data } = await http.get("/api/private");
     if (data.success) setAuthorizedUser(data.user);
   }
   function getUser() {
     const id = props.match.params.id;
-    http.get(`http://localhost:5000/api/auth/${id}`).then((res) => {
+    http.get(`/api/auth/${id}`).then((res) => {
       setUser(res.data.user);
       const userID = res.data.user._id;
-      http.get("http://localhost:5000/api/blog/all").then((res) => {
+      http.get("/api/blog/all").then((res) => {
         setBlogs(res.data.blogs.filter((blog) => blog.author === userID));
         console.log(res.data.blogs);
       });
@@ -36,7 +36,7 @@ export default function Profile({ props }) {
   async function followUser() {
     const id = props.match.params.id;
     const { data } = await http.get(
-      `http://localhost:5000/api/auth/${id}/follow`
+      `/api/auth/${id}/follow`
     );
     if (data.success) setUser(data.user);
   }
@@ -55,7 +55,7 @@ export default function Profile({ props }) {
               style={{
                 backgroundImage: `url(${
                   user.ava
-                    ? `http://localhost:5000/api/image/${user.ava})`
+                    ? `/api/image/${user.ava})`
                     : ava
                 }`,
               }}

@@ -19,13 +19,13 @@ export default function ProfileSettings({ props }) {
     fd.append("bio", bio);
     console.log(ava);
     const { data } = await http.patch(
-      `http://localhost:5000/api/auth/${id}/update`,
+      `/api/auth/${id}/update`,
       fd
     );
     history.push(`/user/${authorizedUser._id}`);
   }
   async function getUser() {
-    const { data } = await http.get("http://localhost:5000/api/private");
+    const { data } = await http.get("/api/private");
     if (data.success) {
       setName(data.user.name);
       setBio(data.user.bio);
@@ -51,7 +51,7 @@ export default function ProfileSettings({ props }) {
                   style={{
                     backgroundImage: `url(${
                       authorizedUser.ava
-                        ? `http://localhost:5000/api/image/${authorizedUser.ava})`
+                        ? `https://algorithammer.herokuapp.com/api/image/${authorizedUser.ava})`
                         : ava
                     }`,
                   }}
