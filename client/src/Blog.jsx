@@ -96,10 +96,6 @@ export default function Blog({ props }) {
             </div>
             <div className="blog-info">
               <div className="blog-options">
-                <i className="fas fa-bookmark"></i>
-                Save
-                <i className="fas fa-flag"></i>
-                Report
                 {(authorizedUser._id === author._id && (
                   <Link
                     to={`/blog/editor/${blog._id}`}

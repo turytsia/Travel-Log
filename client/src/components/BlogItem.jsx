@@ -24,14 +24,14 @@ export default function BlogItem({ blog }) {
           </span>
         </h4>
         <p className="travel-item-text">{blog.body.slice(0, 140)}...</p>
-        <div className="travel-item-tags">
-          {blog.tags.map((tag, i) => (
-            <span key={i} className="tag-item">
-              {tag}
-            </span>
-          ))}
-        </div>
       </Link>
+      <div className="travel-item-tags">
+        {blog.tags.map((tag, i) => (
+          <Link to={`/?tag=${tag}`} key={i} className="tag-item">
+            {tag}
+          </Link>
+        ))}
+      </div>
       <div className="travel-item-info">
         <span className="travel-item-comment">
           <i className="fas fa-comment-dots"></i>

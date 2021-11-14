@@ -5,10 +5,10 @@ import Footer from "./components/Footer";
 import Main from "./Main";
 import Profile from "./Profile";
 import Auth from "./Auth";
-import Categories from "./Categories";
 import People from "./People";
 import Blog from "./Blog";
 import Editor from "./Editor";
+import ProfileSettings from "./ProfileSettings";
 import { createContext, useEffect, useState } from "react";
 
 import http from "./services.js";
@@ -28,7 +28,6 @@ function MainPages() {
   async function getUser() {
     const { data } = await http.get("http://localhost:5000/api/private");
     if (data.success) setAuthorized(data.user);
-    //console.log(data.user);
   }
   useEffect(() => {
     getBlogs();
@@ -41,7 +40,11 @@ function MainPages() {
         <div className="main">
           <div className="wrapper">
             <Switch>
-              <Route exact path="/" render={() => <Main blogs={blogs} />} />
+              <Route
+                exact
+                path="/"
+                render={(props) => <Main props={props} blogs={blogs} />}
+              />
               <Route
                 exact
                 path="/blog/editor/:id"
@@ -53,7 +56,11 @@ function MainPages() {
                 path="/user/:id"
                 render={(props) => <Profile props={props} />}
               />
-              <Route exact path="/categories" component={Categories} />
+              <Route
+                exact
+                path="/user/:id/settings"
+                render={(props) => <ProfileSettings props={props} />}
+              />
               <Route exact path="/people" component={People} />
               <Route
                 exact

@@ -66,7 +66,6 @@ export default function Editor({ editMode, props }) {
   }
   useEffect(() => {
     getBlog();
-    console.log(tagName);
   }, [editMode]);
   return (
     <section className="editor">
@@ -126,9 +125,8 @@ export default function Editor({ editMode, props }) {
             <h3>Tags</h3>
             <label htmlFor="input" className="editor-tags">
               {tags.map((tag, i) => (
-                <span key={i} className="tag-item">
+                <span key={i} onClick={() => removeTag(i)} className="tag-item">
                   {tag}
-                  <i onClick={() => removeTag(i)} className="fas fa-times"></i>
                 </span>
               ))}
 

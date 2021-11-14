@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import ava from "./images/avatar_man.png";
 import { Link, useHistory } from "react-router-dom";
 import { Authorization } from "./App";
 import http from "./services.js";
-
+import ava from "./images/avatar_man.png";
 //components
 import BlogItem from "./components/BlogItem";
 
@@ -53,13 +52,19 @@ export default function Profile({ props }) {
           <div className="profile-inner">
             <div
               className="profile-ava"
-              style={{ backgroundImage: `url(${ava})` }}
+              style={{
+                backgroundImage: `url(${
+                  user.ava
+                    ? `http://localhost:5000/api/image/${user.ava})`
+                    : ava
+                }`,
+              }}
             ></div>
             <div className="profile-name">
               <span>{user.name}</span>
             </div>
             <div className="profile-bio">
-              <span>My name is, This is my bio!!!</span>
+              <span>{user.bio}</span>
             </div>
             <div className="profile-stats">
               <div className="profile-followers">
@@ -74,10 +79,13 @@ export default function Profile({ props }) {
             <div className="profile-actions">
               {authorizedUser._id === user._id ? (
                 <>
-                  <h3 className="profile-actions-settings-btn">
+                  <Link
+                    to={`/user/${authorizedUser._id}/settings`}
+                    className="profile-actions-settings-btn"
+                  >
                     Account Settings
                     <i className="fas fa-cog"></i>
-                  </h3>
+                  </Link>
                   <h3
                     onClick={() => signOut()}
                     className="profile-actions-logout"
@@ -85,19 +93,25 @@ export default function Profile({ props }) {
                     <i className="fas fa-sign-out-alt"></i>
                   </h3>
                 </>
-              ) : (<>
-                {user.followers.includes(authorizedUser._id)?<h3
-                  onClick={() => followUser()}
-                  className="profile-actions-unfollow-btn"
-                >
-                  Unfollow
-                </h3>:<h3
-                  onClick={() => followUser()}
-                  className="profile-actions-follow-btn"
-                >
-                  Follow
-                </h3>}
-              </>)}
+              ) : (
+                <>
+                  {user.followers.includes(authorizedUser._id) ? (
+                    <h3
+                      onClick={() => followUser()}
+                      className="profile-actions-unfollow-btn"
+                    >
+                      Unfollow
+                    </h3>
+                  ) : (
+                    <h3
+                      onClick={() => followUser()}
+                      className="profile-actions-follow-btn"
+                    >
+                      Follow
+                    </h3>
+                  )}
+                </>
+              )}
             </div>
             <div className="profile-options">
               <Link to={"/user/editor"} className="profile-options-add">

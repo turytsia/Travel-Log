@@ -4,21 +4,12 @@ import http from "../services.js";
 import moment from "moment";
 export default function Aside() {
   const [blogs, setBlogs] = useState(null);
-  const tags = [
-    "Beach",
-    "Forest",
-    "Travel",
-    "Home",
-    "Cheap",
-    "Expensive",
-    "House",
-    "Apartment",
-  ];
-
+  const [tags, setTags] = useState([]);
   async function getBlogs() {
     try {
       const { data } = await http.get("http://localhost:5000/api/blog/all");
       setBlogs(data.blogs.slice(0, 3));
+      setTags(data.tags.slice(0,10));
     } catch (error) {
       console.error(error);
     }
@@ -26,7 +17,7 @@ export default function Aside() {
 
   useEffect(() => {
     getBlogs();
-  });
+  }, []);
 
   return (
     <aside className="aside">
@@ -56,7 +47,7 @@ export default function Aside() {
               </Link>
             ))
           ) : (
-            <span className = "aside-warning">No posts yet</span>
+            <span className="aside-warning">No posts yet</span>
           )}
         </div>
       </div>
@@ -64,7 +55,7 @@ export default function Aside() {
         <h3 className="aside-title">Tags</h3>
         <div className="aside-tags">
           {tags.map((tag, i) => (
-            <Link to={""} key = {i} className="tag-item">
+            <Link to={`/?tag=${tag}`} key={i} className="tag-item">
               {tag}
             </Link>
           ))}

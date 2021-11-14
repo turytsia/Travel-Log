@@ -23,7 +23,11 @@ function User({ user }) {
       <div className="people-item-inner">
         <div
           className="people-item-ava"
-          style={{ backgroundImage: `url(${ava})` }}
+          style={{
+            backgroundImage: `url(${
+              user.ava ? `http://localhost:5000/api/image/${user.ava})` : ava
+            }`,
+          }}
         ></div>
         <Link to={`/user/${user._id}`} className="people-item-content">
           <h3 className="people-item-username">{user.name}</h3>
@@ -75,9 +79,6 @@ export default function People() {
               type="text"
               placeholder="Vincent..."
             />
-            <button className="main-search-btn">
-              <i className="fas fa-search"></i>
-            </button>
           </div>
         </form>
         <div className="main-wrapper">
@@ -85,7 +86,7 @@ export default function People() {
             {users && searchResult.length ? (
               searchResult.map((user, i) => <User key={i} user={user} />)
             ) : (
-              <span className = "list-warning">No results</span>
+              <span className="list-warning">No results</span>
             )}
           </div>
           <Aside />
