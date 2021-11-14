@@ -1,5 +1,35 @@
 const userModel = require("../models/user");
+const fs = require("fs");
+const path = require("path");
+module.exports.updateUser = async function(req, res) {
+    const { name, bio } = req.body;
+    const userID = req.params.id;
+    let ava = req.body.image;
+    if (req.file) ava = req.file.filename;
+    try {
+        if (!req.user) throw new Error("Unauthorized");
+        const user = await userModel.findById(userID);
+        if (ava !== user.ava) {
+            fs.unlink("./images/" + user.ava, (err) => {
+                if (err) return console.error(err);
+            });
+        }
 
+        await user.updateOne({
+            name,
+            bio,
+            ava,
+        });
+        // const user = await userModel.findByIdAndUpdate(userID, {
+        //     name,
+        //     bio,
+        //     ava,
+        // });
+        res.status(200).json({ success: true, user });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
 module.exports.getUser = async function(req, res) {
     try {
         const id = req.params.id;

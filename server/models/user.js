@@ -18,6 +18,8 @@ const userSchema = new Schema({
         minlength: 6,
         required: true,
     },
+    ava: String,
+    bio: String,
     followers: [String],
     following: [String],
     blogs: [String],

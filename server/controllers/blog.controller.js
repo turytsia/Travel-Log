@@ -57,8 +57,9 @@ module.exports.getBlog = async function(req, res) {
 module.exports.getBlogs = async function(req, res) {
     const filter = {};
     try {
-        const blogs = await blogModel.find(filter);
-        res.status(200).json({ success: true, blogs });
+        const blogs = await blogModel.find(filter).sort({ "createdAt": -1 });
+        const tags = await blogModel.distinct("tags");
+        res.status(200).json({ success: true, blogs, tags });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }
