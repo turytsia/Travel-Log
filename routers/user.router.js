@@ -11,6 +11,7 @@ const {
     updateUser,
 } = require("../controllers/user.controller");
 const auth = require("../middleware/auth");
+//
 
 router.post("/register", Register);
 router.post("/login", Login);
