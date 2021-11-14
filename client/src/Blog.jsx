@@ -16,11 +16,11 @@ export default function Blog({ props }) {
     const id = props.match.params.id;
     if (authorizedUserContext) setAuthorizedUser(authorizedUserContext);
     http
-      .get(`http://localhost:5000/api/blog/${id}`)
+      .get(`/api/blog/${id}`)
       .then((res) => {
         setBlog(res.data.blog);
         http
-          .get(`http://localhost:5000/api/auth/${res.data.blog.author}`)
+          .get(`/api/auth/${res.data.blog.author}`)
           .then((res) => {
             setAuthor(res.data.user);
           })
@@ -32,7 +32,7 @@ export default function Blog({ props }) {
   async function likeBlog() {
     const id = props.match.params.id;
     const { data } = await http.get(
-      `http://localhost:5000/api/blog/${id}/like`
+      `/api/blog/${id}/like`
     );
     if (data.success) {
       setBlog(data.blog);
@@ -43,7 +43,7 @@ export default function Blog({ props }) {
     e.preventDefault();
     const id = props.match.params.id;
     const { data } = await http.post(
-      `http://localhost:5000/api/blog/${id}/comment`,
+      `/api/blog/${id}/comment`,
       { commentBody }
     );
     if (data.success) {
@@ -72,7 +72,7 @@ export default function Blog({ props }) {
                   className="blog-img"
                   key={image}
                   style={{
-                    backgroundImage: `url(http://localhost:5000/api/image/${image})`,
+                    backgroundImage: `url(/api/image/${image})`,
                   }}
                 ></div>
               ))}

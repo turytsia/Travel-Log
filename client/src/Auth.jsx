@@ -19,7 +19,7 @@ function Register() {
         throw new Error("Passwords don't match");
       const payload = { name, password, passwordConfirm, email };
       const {data} = await http.post(
-        "http://localhost:5000/api/auth/register",
+        "/api/auth/register",
         payload
       );
       if (data.success) {
@@ -85,7 +85,7 @@ function Login() {
       if (!password || !email) throw new Error("Invalid data");
       const payload = { password, email };
       const {data} = await http.post(
-        "http://localhost:5000/api/auth/login",
+        "/api/auth/login",
         payload
       );
       if (data.success) {

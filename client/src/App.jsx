@@ -19,14 +19,14 @@ function MainPages() {
   const [blogs, setBlogs] = useState([]);
   async function getBlogs() {
     try {
-      const { data } = await http.get("http://localhost:5000/api/blog/all");
+      const { data } = await http.get("/api/blog/all");
       setBlogs(data.blogs);
     } catch (error) {
       console.error(error);
     }
   }
   async function getUser() {
-    const { data } = await http.get("http://localhost:5000/api/private");
+    const { data } = await http.get("/api/private");
     if (data.success) setAuthorized(data.user);
   }
   useEffect(() => {
