@@ -10,7 +10,7 @@ export default function BlogItem({ blog }) {
       <div
         className="travel-item-img"
         style={{
-          backgroundImage: `url(https://algorithammer.herokuapp.com/api/image/${blog.images[0]})`,
+          backgroundImage: `url(https://arcane-brushlands-47211.herokuapp.com/api/image/${blog.images[0]})`,
         }}
       >
         <Price />

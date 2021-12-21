@@ -7,7 +7,7 @@ export default function Aside() {
   const [tags, setTags] = useState([]);
   async function getBlogs() {
     try {
-      const { data } = await http.get("http://localhost:5000/api/blog/all");
+      const { data } = await http.get("https://arcane-brushlands-47211.herokuapp.com/api/blog/all");
       setBlogs(data.blogs.slice(0, 3));
       setTags(data.tags.slice(0,10));
     } catch (error) {

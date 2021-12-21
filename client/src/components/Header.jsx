@@ -5,10 +5,12 @@ import { Authorization } from "../App";
 
 export default function Header() {
   function moveBackground(e) {
-    const wall = document.getElementById("wall");
-    const nav = document.getElementById("nav");
-    const link = document.getElementsByClassName("header-link");
-    const ico = document.getElementById("user_ico");
+    let wall = document.getElementById("wall");
+    let nav = document.getElementById("nav");
+    let link = document.getElementsByClassName("header-link");
+    let ico = document.getElementById("user_ico");
+
+    if(!wall) return;
 
     wall.style.transform = `translateY(${window.pageYOffset / 10}%)`;
     if (window.pageYOffset > 0) {

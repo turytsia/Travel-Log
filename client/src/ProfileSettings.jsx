@@ -51,7 +51,7 @@ export default function ProfileSettings({ props }) {
                   style={{
                     backgroundImage: `url(${
                       authorizedUser.ava
-                        ? `https://algorithammer.herokuapp.com/api/image/${authorizedUser.ava})`
+                        ? `https://arcane-brushlands-47211.herokuapp.com/api/image/${authorizedUser.ava})`
                         : ava
                     }`,//https://arcane-brushlands-47211.herokuapp.com/
                   }}

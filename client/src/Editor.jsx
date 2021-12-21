@@ -46,7 +46,7 @@ export default function Editor({ editMode, props }) {
     fd.append("category", category);
     fd.append("tags", tags);
     const { data } = await http.post(
-      "/api/blog/create",
+      "https://arcane-brushlands-47211.herokuapp.com/api/blog/create",
       fd
     );
     history.push("/");

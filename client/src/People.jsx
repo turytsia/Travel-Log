@@ -13,7 +13,7 @@ function User({ user }) {
   const [isSubscribed, setSubscribed] = useState(false);
   async function followUser(id) {
     const { data } = await http.get(
-      `http://localhost:5000/api/auth/${id}/follow`
+      `/api/auth/${id}/follow`
     );
     if (data.success) setSubscribed(!isSubscribed);
   }
