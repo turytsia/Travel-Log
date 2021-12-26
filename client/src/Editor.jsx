@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+
 import http from "./services.js";
+import { env } from "../env.js";
+
 export default function Editor({ editMode, props }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -25,10 +28,12 @@ export default function Editor({ editMode, props }) {
     e.preventDefault();
     if (editMode && props) {
       const id = props.match.params.id;
-      const { data } = await http.patch(
-        `/api/blog/update/${id}`,
-        { title, body, tags, category }
-      );
+      const { data } = await http.patch(`/api/blog/update/${id}`, {
+        title,
+        body,
+        tags,
+        category,
+      });
       if (!data.success) console.error(data);
       history.push("/");
     }
@@ -45,10 +50,7 @@ export default function Editor({ editMode, props }) {
     for (let i = 0; i < image.length; i++) fd.append("image", image[i]);
     fd.append("category", category);
     fd.append("tags", tags);
-    const { data } = await http.post(
-      "https://arcane-brushlands-47211.herokuapp.com/api/blog/create",
-      fd
-    );
+    const { data } = await http.post(`${env.URL}/api/blog/create`, fd);
     history.push("/");
   }
 
