@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Authorization } from "./App";
 
 import http from "./services.js";
-import env from "./env.js";
+
 import ava from "./images/avatar_man.png";
 //components
 import BlogItem from "./components/BlogItem";

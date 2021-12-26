@@ -5,7 +5,7 @@ import Aside from "./components/Aside";
 import ava from "./images/avatar_man.png";
 
 import http from "./services.js";
-import env from "./env.js";
+
 //context
 import { Authorization } from "./App";
 export default function Blog({ props }) {

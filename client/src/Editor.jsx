@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 
 import http from "./services.js";
-import env from "./env.js";
+
 
 export default function Editor({ editMode, props }) {
   const [title, setTitle] = useState("");
@@ -18,7 +18,7 @@ export default function Editor({ editMode, props }) {
     if (editMode && props) {
       const id = props.match.params.id;
       try {
-        const { data } = await http.get(` /api/blog/${id}`);
+        const { data } = await http.get(`/api/blog/${id}`);
         if (data.success) {
           setBody(data.blog.body);
           setTitle(data.blog.title);
@@ -35,7 +35,7 @@ export default function Editor({ editMode, props }) {
     e.preventDefault();
     if (editMode && props) {
       const id = props.match.params.id;
-      const { data } = await http.patch(` /api/blog/update/${id}`, {
+      const { data } = await http.patch(`/api/blog/update/${id}`, {
         title,
         body,
         tags,
@@ -57,7 +57,7 @@ export default function Editor({ editMode, props }) {
     for (let i = 0; i < image.length; i++) fd.append("image", image[i]);
     fd.append("category", category);
     fd.append("tags", tags);
-    const { data } = await http.post(` /api/blog/create`, fd);
+    const { data } = await http.post(`/api/blog/create`, fd);
     history.push("/");
   }
 

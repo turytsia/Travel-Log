@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import http from "../services.js";
-import env from "../env.js";
 
 import moment from "moment"; //time lib
 

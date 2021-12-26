@@ -5,7 +5,7 @@ import ava from "./images/avatar_man.png";
 import Aside from "./components/Aside";
 //http
 import http from "./services.js";
-import env from "./env.js";
+
 //context
 import { Authorization } from "./App";
 
