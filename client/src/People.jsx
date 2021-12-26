@@ -13,7 +13,7 @@ function User({ user }) {
   const authorizedUser = useContext(Authorization);
   const [isSubscribed, setSubscribed] = useState(false);
   async function followUser(id) {
-    const { data } = await http.get(`${env.URL}/api/auth/${id}/follow`);
+    const { data } = await http.get(` /api/auth/${id}/follow`);
     if (data.success) setSubscribed(!isSubscribed);
   }
 
@@ -55,7 +55,7 @@ export default function People() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   async function getUsers() {
-    const { data } = await http.get(`${env.URL}/api/auth/all`);
+    const { data } = await http.get(` /api/auth/all`);
     if (data.success) setUsers(data.users);
   }
   useEffect(() => {

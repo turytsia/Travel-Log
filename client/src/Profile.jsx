@@ -17,20 +17,20 @@ export default function Profile({ props }) {
   const history = useHistory();
 
   async function signOut() {
-    const { data } = await http.get(`${env.URL}/api/auth/logout`);
+    const { data } = await http.get(` /api/auth/logout`);
     history.push("/");
   }
   async function getAuthorizedUser() {
-    const { data } = await http.get(`${env.URL}/api/private`);
+    const { data } = await http.get(` /api/private`);
     if (data.success) setAuthorizedUser(data.user);
   }
   function getUser() {
     const id = props.match.params.id;
-    http.get(`${env.URL}/api/auth/${id}`).then((res) => {
+    http.get(` /api/auth/${id}`).then((res) => {
       setUser(res.data.user);
       console.log(res.data.user.ava);
       const userID = res.data.user._id;
-      http.get(`${env.URL}/api/blog/all`).then((res) => {
+      http.get(` /api/blog/all`).then((res) => {
         setBlogs(res.data.blogs.filter((blog) => blog.author === userID));
         console.log(res.data.blogs);
       });
@@ -38,7 +38,7 @@ export default function Profile({ props }) {
   }
   async function followUser() {
     const id = props.match.params.id;
-    const { data } = await http.get(`${env.URL}/api/auth/${id}/follow`);
+    const { data } = await http.get(` /api/auth/${id}/follow`);
     if (data.success) setUser(data.user);
   }
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Profile({ props }) {
               className="profile-ava"
               style={{
                 backgroundImage: `url(${
-                  user.ava ? `${env.URL}/api/image/${user.ava})` : ava
+                  user.ava ? ` /api/image/${user.ava})` : ava
                 }`,
               }}
             ></div>

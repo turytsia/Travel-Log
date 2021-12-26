@@ -11,7 +11,7 @@ export default function Aside() {
   const [tags, setTags] = useState([]);
   async function getBlogs() {
     try {
-      const { data } = await http.get(`${env.URL}/api/blog/all`);
+      const { data } = await http.get(` /api/blog/all`);
       setBlogs(data.blogs.slice(0, 3));
       setTags(data.tags.slice(0, 10));
     } catch (error) {

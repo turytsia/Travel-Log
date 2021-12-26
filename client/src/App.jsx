@@ -22,7 +22,7 @@ function MainPages() {
 
   async function getBlogs() {
     try {
-      const { data } = await http.get(`${env.URL}/api/blog/all`);
+      const { data } = await http.get(` /api/blog/all`);
       setBlogs(data.blogs);
     } catch (error) {
       console.error(error);
@@ -30,7 +30,7 @@ function MainPages() {
   }
   async function getUser() {
     try {
-      const { data } = await http.get(`${env.URL}/api/private`);
+      const { data } = await http.get(` /api/private`);
       if (data.success) setAuthorized(data.user);
     } catch (error) {
       console.error(error);
