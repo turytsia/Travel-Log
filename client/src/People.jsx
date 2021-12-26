@@ -5,6 +5,7 @@ import ava from "./images/avatar_man.png";
 import Aside from "./components/Aside";
 //http
 import http from "./services.js";
+import env from "./env.js";
 //context
 import { Authorization } from "./App";
 
@@ -12,9 +13,7 @@ function User({ user }) {
   const authorizedUser = useContext(Authorization);
   const [isSubscribed, setSubscribed] = useState(false);
   async function followUser(id) {
-    const { data } = await http.get(
-      `/api/auth/${id}/follow`
-    );
+    const { data } = await http.get(`${env.URL}/api/auth/${id}/follow`);
     if (data.success) setSubscribed(!isSubscribed);
   }
 
@@ -56,7 +55,7 @@ export default function People() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   async function getUsers() {
-    const { data } = await http.get("/api/auth/all");
+    const { data } = await http.get(`${env.URL}/api/auth/all`);
     if (data.success) setUsers(data.users);
   }
   useEffect(() => {

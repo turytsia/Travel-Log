@@ -13,22 +13,29 @@ export default function Editor({ editMode, props }) {
   const [tagName, setTagName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
+
   async function getBlog() {
     if (editMode && props) {
       const id = props.match.params.id;
-      const { data } = await http.get(`/api/blog/${id}`);
-      if (!data.success) return;
-      setBody(data.blog.body);
-      setTitle(data.blog.title);
-      setTags(data.blog.tags);
-      setCategory(data.blog.category);
+      try {
+        const { data } = await http.get(`${env.URL}/api/blog/${id}`);
+        if (data.success) {
+          setBody(data.blog.body);
+          setTitle(data.blog.title);
+          setTags(data.blog.tags);
+          setCategory(data.blog.category);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
+
   async function updateBlog(e) {
     e.preventDefault();
     if (editMode && props) {
       const id = props.match.params.id;
-      const { data } = await http.patch(`/api/blog/update/${id}`, {
+      const { data } = await http.patch(`${env.URL}/api/blog/update/${id}`, {
         title,
         body,
         tags,

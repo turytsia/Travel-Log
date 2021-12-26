@@ -15,26 +15,32 @@ import http from "./services.js";
 import env from "./env.js";
 
 export const Authorization = createContext();
+
 function MainPages() {
   const [isAuthorized, setAuthorized] = useState(null);
   const [blogs, setBlogs] = useState([]);
+
   async function getBlogs() {
     try {
-      const { data } = await http.get("https://arcane-brushlands-47211.herokuapp.com/api/blog/all");
+      const { data } = await http.get(`${env.URL}/api/blog/all`);
       setBlogs(data.blogs);
     } catch (error) {
       console.error(error);
     }
   }
   async function getUser() {
-    const { data } = await http.get("https://arcane-brushlands-47211.herokuapp.com/api/private");
-    console.log(env.URL);
-    if (data.success) setAuthorized(data.user);
+    try {
+      const { data } = await http.get(`${env.URL}/api/private`);
+      if (data.success) setAuthorized(data.user);
+    } catch (error) {
+      console.error(error);
+    }
   }
   useEffect(() => {
     getBlogs();
     getUser();
   }, []);
+
   return (
     <Authorization.Provider value={isAuthorized}>
       <Header />

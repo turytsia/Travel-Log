@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 //comps
 import Aside from "./components/Aside";
 import ava from "./images/avatar_man.png";
+
 import http from "./services.js";
+import env from "./env.js";
 //context
 import { Authorization } from "./App";
 export default function Blog({ props }) {
@@ -12,15 +14,16 @@ export default function Blog({ props }) {
   const [blog, setBlog] = useState(null);
   const [author, setAuthor] = useState(null);
   const [commentBody, setCommentBody] = useState("");
+
   function getBlog() {
     const id = props.match.params.id;
     if (authorizedUserContext) setAuthorizedUser(authorizedUserContext);
     http
-      .get(`/api/blog/${id}`)
+      .get(`${env.URL}/api/blog/${id}`)
       .then((res) => {
         setBlog(res.data.blog);
         http
-          .get(`/api/auth/${res.data.blog.author}`)
+          .get(`${env.URL}/api/auth/${res.data.blog.author}`)
           .then((res) => {
             setAuthor(res.data.user);
           })
@@ -31,9 +34,7 @@ export default function Blog({ props }) {
 
   async function likeBlog() {
     const id = props.match.params.id;
-    const { data } = await http.get(
-      `/api/blog/${id}/like`
-    );
+    const { data } = await http.get(`${env.URL}/api/blog/${id}/like`);
     if (data.success) {
       setBlog(data.blog);
     }
@@ -42,10 +43,9 @@ export default function Blog({ props }) {
   async function postComment(e) {
     e.preventDefault();
     const id = props.match.params.id;
-    const { data } = await http.post(
-      `/api/blog/${id}/comment`,
-      { commentBody }
-    );
+    const { data } = await http.post(`${env.URL}/api/blog/${id}/comment`, {
+      commentBody,
+    });
     if (data.success) {
       setBlog(data.blog);
       setCommentBody("");
@@ -96,7 +96,7 @@ export default function Blog({ props }) {
             </div>
             <div className="blog-info">
               <div className="blog-options">
-                {(authorizedUser._id === author._id && (
+                {authorizedUser._id === author._id && (
                   <Link
                     to={`/blog/editor/${blog._id}`}
                     className="blog-options-link"
@@ -104,7 +104,7 @@ export default function Blog({ props }) {
                     <i className="fas fa-edit"></i>
                     Edit
                   </Link>
-                ))}
+                )}
               </div>
               <button onClick={() => likeBlog()} className="blog-rating">
                 <i className="fas fa-thumbs-up"></i>

@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import http from "../services.js";
-import moment from "moment";
+import env from "../env.js";
+
+import moment from "moment"; //time lib
+
 export default function Aside() {
   const [blogs, setBlogs] = useState(null);
   const [tags, setTags] = useState([]);
   async function getBlogs() {
     try {
-      const { data } = await http.get("https://arcane-brushlands-47211.herokuapp.com/api/blog/all");
+      const { data } = await http.get(`${env.URL}/api/blog/all`);
       setBlogs(data.blogs.slice(0, 3));
-      setTags(data.tags.slice(0,10));
+      setTags(data.tags.slice(0, 10));
     } catch (error) {
       console.error(error);
     }

@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Authorization } from "./App";
+
 import http from "./services.js";
+import env from "./env.js";
 import ava from "./images/avatar_man.png";
 //components
 import BlogItem from "./components/BlogItem";
@@ -15,11 +17,11 @@ export default function Profile({ props }) {
   const history = useHistory();
 
   async function signOut() {
-    const { data } = await http.get("/api/auth/logout");
+    const { data } = await http.get(`${env.URL}/api/auth/logout`);
     history.push("/");
   }
   async function getAuthorizedUser() {
-    const { data } = await http.get("/api/private");
+    const { data } = await http.get(`${env.URL}/api/private`);
     if (data.success) setAuthorizedUser(data.user);
   }
   function getUser() {
@@ -35,13 +37,12 @@ export default function Profile({ props }) {
   }
   async function followUser() {
     const id = props.match.params.id;
-    const { data } = await http.get(
-      `/api/auth/${id}/follow`
-    );
+    const { data } = await http.get(`${env.URL}/api/auth/${id}/follow`);
     if (data.success) setUser(data.user);
   }
   useEffect(() => {
     getUser();
+    console.log(user.ava);
     if (authorizedUserContext) setAuthorizedUser(authorizedUserContext);
     else getAuthorizedUser();
   }, [props.match.params.id]);
@@ -54,9 +55,7 @@ export default function Profile({ props }) {
               className="profile-ava"
               style={{
                 backgroundImage: `url(${
-                  user.ava
-                    ? `/api/image/${user.ava})`
-                    : ava
+                  user.ava ? `${env.URL}/api/image/${user.ava})` : ava
                 }`,
               }}
             ></div>
