@@ -1,3 +1,3 @@
-module.exports.env = class {
-    URL = "https://arcane-brushlands-47211.herokuapp.com";
-}
+const URL = "https://arcane-brushlands-47211.herokuapp.com";
+
+module.exports = { URL };

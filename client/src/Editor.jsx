@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 
 import http from "./services.js";
-import { env } from "./env.js";
+import env from "./env.js";
 
 export default function Editor({ editMode, props }) {
   const [title, setTitle] = useState("");
@@ -50,7 +50,6 @@ export default function Editor({ editMode, props }) {
     for (let i = 0; i < image.length; i++) fd.append("image", image[i]);
     fd.append("category", category);
     fd.append("tags", tags);
-    console.log(env.URL);
     const { data } = await http.post(`${env.URL}/api/blog/create`, fd);
     history.push("/");
   }

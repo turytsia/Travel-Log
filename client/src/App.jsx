@@ -12,6 +12,7 @@ import ProfileSettings from "./ProfileSettings";
 import { createContext, useEffect, useState } from "react";
 
 import http from "./services.js";
+import env from "./env.js";
 
 export const Authorization = createContext();
 function MainPages() {
@@ -27,7 +28,7 @@ function MainPages() {
   }
   async function getUser() {
     const { data } = await http.get("https://arcane-brushlands-47211.herokuapp.com/api/private");
-    console.log("hello!");
+    console.log(env.URL);
     if (data.success) setAuthorized(data.user);
   }
   useEffect(() => {
