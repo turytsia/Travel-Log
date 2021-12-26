@@ -19,11 +19,11 @@ export default function Blog({ props }) {
     const id = props.match.params.id;
     if (authorizedUserContext) setAuthorizedUser(authorizedUserContext);
     http
-      .get(` /api/blog/${id}`)
+      .get(`/api/blog/${id}`)
       .then((res) => {
         setBlog(res.data.blog);
         http
-          .get(` /api/auth/${res.data.blog.author}`)
+          .get(`/api/auth/${res.data.blog.author}`)
           .then((res) => {
             setAuthor(res.data.user);
           })
@@ -34,7 +34,7 @@ export default function Blog({ props }) {
 
   async function likeBlog() {
     const id = props.match.params.id;
-    const { data } = await http.get(` /api/blog/${id}/like`);
+    const { data } = await http.get(`/api/blog/${id}/like`);
     if (data.success) {
       setBlog(data.blog);
     }
@@ -43,7 +43,7 @@ export default function Blog({ props }) {
   async function postComment(e) {
     e.preventDefault();
     const id = props.match.params.id;
-    const { data } = await http.post(` /api/blog/${id}/comment`, {
+    const { data } = await http.post(`/api/blog/${id}/comment`, {
       commentBody,
     });
     if (data.success) {
