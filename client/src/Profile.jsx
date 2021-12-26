@@ -26,10 +26,11 @@ export default function Profile({ props }) {
   }
   function getUser() {
     const id = props.match.params.id;
-    http.get(`/api/auth/${id}`).then((res) => {
+    http.get(`${env.URL}/api/auth/${id}`).then((res) => {
       setUser(res.data.user);
+      console.log(res.data.user.ava);
       const userID = res.data.user._id;
-      http.get("/api/blog/all").then((res) => {
+      http.get(`${env.URL}/api/blog/all`).then((res) => {
         setBlogs(res.data.blogs.filter((blog) => blog.author === userID));
         console.log(res.data.blogs);
       });
@@ -42,7 +43,6 @@ export default function Profile({ props }) {
   }
   useEffect(() => {
     getUser();
-    console.log(user.ava);
     if (authorizedUserContext) setAuthorizedUser(authorizedUserContext);
     else getAuthorizedUser();
   }, [props.match.params.id]);
