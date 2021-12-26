@@ -27,6 +27,7 @@ function MainPages() {
   }
   async function getUser() {
     const { data } = await http.get("https://arcane-brushlands-47211.herokuapp.com/api/private");
+    console.log("hello!");
     if (data.success) setAuthorized(data.user);
   }
   useEffect(() => {
