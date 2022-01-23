@@ -2,50 +2,47 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Authorization } from "./App";
 
-import http from "./services.js";
-
+//images
 import ava from "./images/avatar_man.png";
 //components
-import BlogItem from "./components/BlogItem";
+import BlogList from "./components/BlogList";
+
+import http, { reqUserById, reqBlogs, getImageURL } from "./services.js";
 
 export default function Profile({ props }) {
-  const authorizedUserContext = useContext(Authorization);
+  const authorizedUser = useContext(Authorization);
   const [user, setUser] = useState(null);
-  const [authorizedUser, setAuthorizedUser] = useState({ _id: null });
   const [blogs, setBlogs] = useState(null);
 
   const history = useHistory();
 
-  async function signOut() {
-    const { data } = await http.get(`/api/auth/logout`);
-    history.push("/");
+  function signOut() {
+    http
+      .get(`/api/auth/logout`)
+      .then(({ data }) => {
+        console.log(data);
+        history.push("/");
+      })
+      .catch((error) => console.error(error));
   }
-  async function getAuthorizedUser() {
-    const { data } = await http.get(`/api/private`);
-    if (data.success) setAuthorizedUser(data.user);
-  }
-  function getUser() {
-    const id = props.match.params.id;
-    http.get(`/api/auth/${id}`).then((res) => {
-      setUser(res.data.user);
-      console.log(res.data.user.ava);
-      const userID = res.data.user._id;
-      http.get(`/api/blog/all`).then((res) => {
-        setBlogs(res.data.blogs.filter((blog) => blog.author === userID));
-        console.log(res.data.blogs);
-      });
-    });
-  }
-  async function followUser() {
-    const id = props.match.params.id;
-    const { data } = await http.get(`/api/auth/${id}/follow`);
-    if (data.success) setUser(data.user);
+
+  function followUser(id) {
+    http
+      .get(`/api/auth/${id}/follow`)
+      .then(({ data }) => setUser(data.user))
+      .catch((error) => console.error(error.message));
   }
   useEffect(() => {
-    getUser();
-    if (authorizedUserContext) setAuthorizedUser(authorizedUserContext);
-    else getAuthorizedUser();
-  }, [props.match.params.id]);
+    reqUserById(props.match.params.id).then((user) => {
+      setUser(user);
+      reqBlogs().then((data) => {
+        setBlogs(
+          data.blogs.filter((blog) => blog.author === user._id)
+        );
+      });
+    });
+
+  }, [props.match.params.id, authorizedUser]);
   return (
     <>
       {user && (
@@ -55,16 +52,18 @@ export default function Profile({ props }) {
               className="profile-ava"
               style={{
                 backgroundImage: `url(${
-                  user.ava ? `/api/image/${user.ava})` : ava
+                  user.ava ? `${getImageURL(user.ava)})` : ava
                 }`,
               }}
             ></div>
             <div className="profile-name">
               <span>{user.name}</span>
             </div>
-            <div className="profile-bio">
-              <span>{user.bio}</span>
-            </div>
+            {user.bio && (
+              <div className="profile-bio">
+                <span>{user.bio}</span>
+              </div>
+            )}
             <div className="profile-stats">
               <div className="profile-followers">
                 <i className="fas fa-hiking"></i>
@@ -76,7 +75,18 @@ export default function Profile({ props }) {
               </div>
             </div>
             <div className="profile-actions">
-              {authorizedUser._id === user._id ? (
+              {authorizedUser._id !== user._id ? (
+                <>
+                <h3
+                  onClick={() => followUser(user._id)}
+                  className="profile-actions-unfollow-btn"
+                >
+                  {user.followers.includes(authorizedUser._id)
+                    ? "Unfollow"
+                    : "Follow"}
+                </h3>
+              </>
+              ) : (
                 <>
                   <Link
                     to={`/user/${authorizedUser._id}/settings`}
@@ -92,28 +102,10 @@ export default function Profile({ props }) {
                     <i className="fas fa-sign-out-alt"></i>
                   </h3>
                 </>
-              ) : (
-                <>
-                  {user.followers.includes(authorizedUser._id) ? (
-                    <h3
-                      onClick={() => followUser()}
-                      className="profile-actions-unfollow-btn"
-                    >
-                      Unfollow
-                    </h3>
-                  ) : (
-                    <h3
-                      onClick={() => followUser()}
-                      className="profile-actions-follow-btn"
-                    >
-                      Follow
-                    </h3>
-                  )}
-                </>
               )}
             </div>
             <div className="profile-options">
-              <Link to={"/user/editor"} className="profile-options-add">
+              <Link to={"/user/editor"} className="profile-option">
                 <i className="fas fa-pencil-alt"></i>
                 Write a Story!
               </Link>
@@ -121,13 +113,7 @@ export default function Profile({ props }) {
 
             <div className="profile-list">
               <div className="profile-list-inner">
-                {blogs && blogs.length > 0 ? (
-                  blogs.map((blog) => <BlogItem key={blog._id} blog={blog} />)
-                ) : (
-                  <h3 className="profile-list-warning">
-                    You have posted 0 blogs...
-                  </h3>
-                )}
+                {blogs && <BlogList blogs={blogs} />}
               </div>
             </div>
           </div>

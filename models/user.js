@@ -22,9 +22,8 @@ const userSchema = new Schema({
     bio: String,
     followers: [String],
     following: [String],
-    blogs: [String],
-    likes: [String],
-});
+    blogs: [String]
+}, { timestamps: true });
 
 userSchema.pre("save", async function() {
     if (!this.isModified(this.password))
@@ -39,35 +38,23 @@ userSchema.methods.matchPasswords = async function(password) {
     return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.likeBlog = async function(id) {
-    if (!this.likes.includes(id)) {
-        this.likes.push(id);
-        await blogModel.findByIdAndUpdate(id, { $inc: { likes: 1 } });
-    } else {
-        this.likes = this.likes.filter((like) => like !== id);
-        await blogModel.findByIdAndUpdate(id, { $inc: { likes: -1 } });
-    }
-    this.markModified("likes");
-};
-
 userSchema.methods.followUser = function(id) {
     if (!this.following.includes(id)) {
-        this.following.push(id)
+        this.following.push(id);
     } else {
         this.following = this.following.filter((userID) => userID !== id);
     }
     this.markModified("following");
-}
+};
 
 userSchema.methods.addFollower = function(id) {
     if (!this.followers.includes(id)) {
-        this.followers.push(id)
+        this.followers.push(id);
     } else {
         this.followers = this.followers.filter((userID) => userID != id);
-
     }
     this.markModified("followers");
-}
+};
 
 const userModel = model("user", userSchema);
 module.exports = userModel;

@@ -13,32 +13,20 @@ import { createContext, useEffect, useState } from "react";
 
 import http from "./services.js";
 
-
 export const Authorization = createContext();
 
 function MainPages() {
-  const [isAuthorized, setAuthorized] = useState(null);
-  const [blogs, setBlogs] = useState([]);
+  const [isAuthorized, setAuthorized] = useState({_id:null});
 
-  async function getBlogs() {
-    try {
-      const { data } = await http.get(`/api/blog/all`);
-      setBlogs(data.blogs);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  async function getUser() {
-    try {
-      const { data } = await http.get(`/api/private`);
-      if (data.success) setAuthorized(data.user);
-    } catch (error) {
-      console.error(error);
-    }
-  }
   useEffect(() => {
-    getBlogs();
-    getUser();
+    http
+      .get(`/api/private`)
+      .then(({ data }) => {
+        setAuthorized(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
@@ -48,11 +36,7 @@ function MainPages() {
         <div className="main">
           <div className="wrapper">
             <Switch>
-              <Route
-                exact
-                path="/"
-                render={(props) => <Main props={props} blogs={blogs} />}
-              />
+              <Route exact path="/" render={() => <Main />} />
               <Route
                 exact
                 path="/blog/editor/:id"

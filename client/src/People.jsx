@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ava from "./images/avatar_man.png";
-//components
-import Aside from "./components/Aside";
 //http
 import http from "./services.js";
 
@@ -11,6 +9,7 @@ import { Authorization } from "./App";
 
 function User({ user }) {
   const authorizedUser = useContext(Authorization);
+
   const [isSubscribed, setSubscribed] = useState(false);
   async function followUser(id) {
     const { data } = await http.get(`/api/auth/${id}/follow`);
@@ -39,7 +38,7 @@ function User({ user }) {
           onClick={() => followUser(user._id)}
           className="people-item-btn"
         >
-          {(authorizedUser && authorizedUser.following.includes(user._id)) ||
+          {(authorizedUser._id && authorizedUser.following.includes(user._id)) ||
           isSubscribed ? (
             <i className="fas fa-user-check"></i>
           ) : (
@@ -52,19 +51,20 @@ function User({ user }) {
 }
 export default function People() {
   const [users, setUsers] = useState(null);
-  const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  async function getUsers() {
-    const { data } = await http.get(`/api/auth/all`);
-    if (data.success) setUsers(data.users);
+
+  function searchPeople(search) {
+    setSearchResult(
+      users.filter((user) => user.name.toLowerCase().includes(search.toLowerCase()))
+    );
   }
+
   useEffect(() => {
-    getUsers();
-    if (users)
-      setSearchResult(
-        users.filter((user) => user.name.toLowerCase().includes(search))
-      );
-  }, [search]);
+    http
+      .get(`/api/auth/all`)
+      .then(({ data }) => setUsers(data.users))
+      .catch((error) => console.error(error));
+  }, []);
   return (
     <section className="people">
       <div className="people-inner">
@@ -72,8 +72,7 @@ export default function People() {
           <h2>Search for people</h2>
           <div className="main-input-outer">
             <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => searchPeople(e.target.value)}
               className="main-input"
               type="text"
               placeholder="Vincent..."
@@ -88,7 +87,6 @@ export default function People() {
               <span className="list-warning">No results</span>
             )}
           </div>
-          <Aside />
         </div>
       </div>
     </section>

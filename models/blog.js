@@ -18,23 +18,21 @@ const blogSchema = new Schema({
         type: String,
         required: true,
     },
-    likes: {
-        type: Number,
-        default: 0,
-    },
-    createdAt: {
-        type: Date,
-        required: true,
-    },
-    updatedAt: {
-        type: Date,
-        required: true,
-    },
-});
+    likes: [String],
+}, { timestamps: true });
 
-blogSchema.methods.Comment = function(comment) {
+blogSchema.methods.comment = function(comment) {
     this.comments.push(comment);
     this.markModified("comments");
+};
+
+blogSchema.methods.like = function(id) {
+    if (!this.likes.includes(id)) {
+        this.likes.push(id);
+    } else {
+        this.likes = this.likes.filter((like) => like !== id);
+    }
+    this.markModified("likes");
 };
 
 const blogModel = model("blog", blogSchema);

@@ -1,4 +1,4 @@
-@import './colors';
+@import "./colors";
 .wrapper {
     max-width: 1300px;
     margin: 0 auto;
@@ -8,6 +8,7 @@
 
 a {
     text-decoration: none;
+    color: black;
 }
 
 h1,
@@ -28,7 +29,7 @@ body {
     padding: 0;
     margin: 0;
     overflow-x: hidden;
-    font-family: 'Yaldevi', sans-serif;
+    font-family: "Yaldevi", sans-serif;
 }
 
 * {
@@ -37,33 +38,35 @@ body {
 
 input,
 textarea {
-    font-family: 'Yaldevi', sans-serif;
+    font-family: "Yaldevi", sans-serif;
+    background-color: $gray;
 }
 
 p,
 pre {
-    font-family: 'Yaldevi', sans-serif;
+    font-family: "Yaldevi", sans-serif;
 }
 
-.tag-item {
-    color: black;
-    padding: 5px 25px;
-    margin: 5px;
-    border: 1px solid rgba(black, 0.3);
-    background-color: rgba($black, 0.005);
-    border-radius: 14px;
-    transition: 0.1s;
-    cursor: pointer;
-}
-
-.tag-item:hover {
-    background-color: rgba($black, 0.034);
-}
-
-.tag-item i {
-    padding-left: 5px;
-    color: $black;
-    cursor: pointer;
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    &-item {
+        padding: 5px 25px;
+        margin: 5px;
+        border: 1px solid rgba(black, 0.3);
+        background-color: rgba($black, 0.005);
+        border-radius: 14px;
+        transition: 0.1s;
+        cursor: pointer;
+    }
+    &-item:hover {
+        background-color: rgba($black, 0.034);
+    }
+    &-item {
+        color: $black;
+        cursor: pointer;
+    }
 }
 
 button {
@@ -73,35 +76,42 @@ button {
 }
 
 .list {
-    border-top: 1px solid rgba($black, .2);
     width: 80%;
-    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 15px;
+    max-width: 700px;
     &-warning {
         display: block;
         margin-top: 20px;
-        color: rgba($black, .3);
+        color: rgba($black, 0.3);
+        text-align: center;
     }
     &-item {
-        margin: 13px auto;
+        width: 100%;
+        background-color: white;
+        margin-bottom: 15px;
     }
 }
 
-//.loading {
-//     margin: 50px auto;
-//     height: 100px;
-//     width: 100px;
-// }
-// .loading i {
-//     color: $blue;
-//     font-size: 50px;
-//     animation: loadingAnimation 1s ease-in-out infinite;
-// }
-// @keyframes loadingAnimation {
-//     0% {
-//         transform: rotateZ(0deg);
-//     }
-//     100% {
-//         transform: rotateZ(360deg);
-//     }
-// }
-//
+.pager {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    &-item {
+        padding: 10px 18px;
+        margin: 0 5px;
+        background-color: white;
+        cursor: pointer;
+        font-weight: 600;
+        border: 6px solid $gray;
+        transition: 0.1s;
+    }
+    &-item:hover {
+        border: 6px solid #ececec;
+    }
+    &-item--active {
+        background-color: $blue;
+        color: white;
+    }
+}

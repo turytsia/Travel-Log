@@ -24,7 +24,6 @@ function Register() {
       );
       if (data.success) {
         history.push("/");
-        console.log(1324)
       } else setErrorMessage(data.message);
     } catch (error) {
       setErrorMessage(error.message);

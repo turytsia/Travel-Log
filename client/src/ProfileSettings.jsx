@@ -3,37 +3,29 @@ import { Link, useHistory } from "react-router-dom";
 import { Authorization } from "./App";
 import ava from "./images/avatar_man.png";
 //http
-import http from "./services.js";
+import http, { getImageURL } from "./services.js";
 export default function ProfileSettings({ props }) {
   const authorizedUser = useContext(Authorization);
   const history = useHistory();
-  const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
-  const [ava, setAva] = useState("");
+  const [name, setName] = useState(authorizedUser.name);
+  const [bio, setBio] = useState(authorizedUser.bio);
+  const [avatar, setAvatar] = useState(authorizedUser.ava);
   async function updateUser(e) {
     e.preventDefault();
     const id = props.match.params.id;
     const fd = new FormData();
     fd.append("name", name);
-    fd.append("image", ava || authorizedUser.ava);
+    fd.append("image", avatar || "");
     fd.append("bio", bio);
-    console.log(ava);
-    const { data } = await http.patch(
-      `/api/auth/${id}/update`,
-      fd
-    );
+    const { data } = await http.patch(`/api/auth/${id}/update`, fd);
     history.push(`/user/${authorizedUser._id}`);
   }
-  async function getUser() {
-    const { data } = await http.get("/api/private");
-    if (data.success) {
-      setName(data.user.name);
-      setBio(data.user.bio);
-      setAva(data.user.ava);
-    }
-  }
   useEffect(() => {
-    getUser();
+    http.get("/api/private").then(({ data }) => {
+      setName(data.name);
+      setBio(data.bio || "");
+      setAvatar(data.ava);
+    });
   }, []);
   return (
     <>
@@ -50,17 +42,15 @@ export default function ProfileSettings({ props }) {
                   className="profile-settings-ava"
                   style={{
                     backgroundImage: `url(${
-                      authorizedUser.ava
-                        ? `https://arcane-brushlands-47211.herokuapp.com/api/image/${authorizedUser.ava})`
-                        : ava
-                    }`,//https://arcane-brushlands-47211.herokuapp.com/
+                      authorizedUser.ava ? getImageURL(authorizedUser.ava) : ava
+                    }`,
                   }}
                 >
                   <input
                     className="profile-settings-ava-input"
                     name="image"
                     type="file"
-                    onChange={(e) => setAva(e.target.files[0])}
+                    onChange={(e) => setAvatar(e.target.files[0])}
                   />
                 </div>
                 <div className="profile-settings-item">

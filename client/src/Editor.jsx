@@ -3,11 +3,10 @@ import { useHistory } from "react-router";
 
 import http from "./services.js";
 
-
 export default function Editor({ editMode, props }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [image, setImage] = useState([]);
+  const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState([]);
   const [tagName, setTagName] = useState("");
@@ -19,10 +18,12 @@ export default function Editor({ editMode, props }) {
       const id = props.match.params.id;
       try {
         const { data } = await http.get(`/api/blog/${id}`);
+        console.log(data);
         if (data.success) {
           setBody(data.blog.body);
           setTitle(data.blog.title);
           setTags(data.blog.tags);
+          setImages(data.blog.images);
           setCategory(data.blog.category);
         }
       } catch (error) {
@@ -47,14 +48,14 @@ export default function Editor({ editMode, props }) {
   }
   async function postBlog(e) {
     e.preventDefault();
-    if (!title || !body || !category || !image.length) {
-      setErrorMessage("Invalid fields");
+    if (!title || !body || !category || !images.length) {
+      setErrorMessage("Invalid input");
       return;
     } else setErrorMessage("");
     const fd = new FormData();
     fd.append("title", title);
     fd.append("body", body);
-    for (let i = 0; i < image.length; i++) fd.append("image", image[i]);
+    for (let i = 0; i < images.length; i++) fd.append("image", images[i]);
     fd.append("category", category);
     fd.append("tags", tags);
     const { data } = await http.post(`/api/blog/create`, fd);
@@ -76,6 +77,7 @@ export default function Editor({ editMode, props }) {
   useEffect(() => {
     getBlog();
   }, [editMode]);
+
   return (
     <section className="editor">
       <h2 className="editor-title">Editor</h2>
@@ -117,9 +119,15 @@ export default function Editor({ editMode, props }) {
               multiple
               name="image"
               type="file"
-              onChange={(e) => setImage(e.target.files)}
+              onChange={(e) => setImages([...e.target.files])}
             />
           </div>
+          {console.log(images)}
+          {images.length?<div className="editor-form-images">
+              {images.map((image) => (
+               <img src={URL.createObjectURL(image)} alt = ""/>
+              ))}
+            </div>:null}
           <div className="editor-form-wrapper">
             <h3>Category</h3>
             <input
@@ -134,7 +142,7 @@ export default function Editor({ editMode, props }) {
             <h3>Tags</h3>
             <label htmlFor="input" className="editor-tags">
               {tags.map((tag, i) => (
-                <span key={i} onClick={() => removeTag(i)} className="tag-item">
+                <span key={i} onClick={() => removeTag(i)} className="tag-list-item">
                   {tag}
                 </span>
               ))}

@@ -1,71 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
-import http from "../services.js";
+//components
+import Tags from "./Tags";
 
-import moment from "moment"; //time lib
+export default function Aside({ blogs, tags, toggleTagSearch }) {
+  const textToShow = 50;
+  const blogsToShow = 3;
 
-export default function Aside() {
-  const [blogs, setBlogs] = useState(null);
-  const [tags, setTags] = useState([]);
-  async function getBlogs() {
-    try {
-      const { data } = await http.get(`/api/blog/all`);
-      setBlogs(data.blogs.slice(0, 3));
-      setTags(data.tags.slice(0, 10));
-    } catch (error) {
-      console.error(error);
-    }
+  function Blog({ blog }) {
+    return (
+      <Link to={`/blog/${blog._id}`} className="aside-list-item">
+        <h4 className="aside-list-title">{blog.title}</h4>
+        <span className="aside-list-item-text">
+          {blog.body.slice(0, textToShow)}
+        </span>
+        <span className="aside-list-item-btn">
+          {moment(blog.createdAt).fromNow()}
+        </span>
+        <div className="aside-list-item-info">
+          <i className="fas fa-heart"></i>
+          {blog.likes.length}
+          <i className="fas fa-comment-dots"></i>
+          {blog.comments.length}
+        </div>
+      </Link>
+    );
   }
 
-  useEffect(() => {
-    getBlogs();
-  }, []);
+  function List() {
+    return blogs ? (
+      blogs
+        .slice(0, blogsToShow)
+        .map((blog) => <Blog blog={blog} key={blog._id} />)
+    ) : (
+      <span className="aside-warning">No posts yet</span>
+    );
+  }
 
   return (
     <aside className="aside">
       <div className="aside-section">
         <h3 className="aside-title">New & Hot</h3>
         <div className="aside-list">
-          {blogs && blogs.length ? (
-            blogs.map((blog) => (
-              <Link
-                key={blog._id}
-                to={`/blog/${blog._id}`}
-                className="aside-list-item"
-              >
-                <h4 className="aside-list-title">{blog.title}</h4>
-                <span className="aside-list-item-text">
-                  {blog.body.slice(0, 50)}
-                </span>
-                <span className="aside-list-item-btn">
-                  {moment(blog.createdAt).fromNow()}
-                </span>
-                <div className="aside-list-item-info">
-                  <i className="fas fa-heart"></i>
-                  {blog.likes}
-                  <i className="fas fa-comment-dots"></i>
-                  {blog.comments.length}
-                </div>
-              </Link>
-            ))
-          ) : (
-            <span className="aside-warning">No posts yet</span>
-          )}
+          <List />
         </div>
       </div>
+      <h3 className="aside-title">Tags</h3>
       <div className="aside-section">
-        <h3 className="aside-title">Tags</h3>
-        <div className="aside-tags">
-          {tags.map((tag, i) => (
-            <Link to={`/?tag=${tag}`} key={i} className="tag-item">
-              {tag}
-            </Link>
-          ))}
-        </div>
+        <Tags tags={tags} toggleTagSearch={toggleTagSearch} />
       </div>
       <div className="aside-support">
-        <Link to="">Help & Support</Link>
+        <Link to="/">Help & Support</Link>
       </div>
     </aside>
   );

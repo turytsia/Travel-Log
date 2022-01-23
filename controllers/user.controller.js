@@ -1,6 +1,6 @@
 const userModel = require("../models/user");
 const fs = require("fs");
-const path = require("path");
+
 module.exports.updateUser = async function(req, res) {
     const { name, bio } = req.body;
     const userID = req.params.id;
@@ -20,24 +20,22 @@ module.exports.updateUser = async function(req, res) {
             bio,
             ava,
         });
-        // const user = await userModel.findByIdAndUpdate(userID, {
-        //     name,
-        //     bio,
-        //     ava,
-        // });
+
         res.status(200).json({ success: true, user });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }
 };
 module.exports.getUser = async function(req, res) {
-    try {
-        const id = req.params.id;
-        const user = await userModel.findById(id, "-password");
-        res.json({ success: true, user });
-    } catch (err) {
-        res.json({ success: false, message: err.message });
-    }
+    const id = req.params.id;
+    userModel
+        .findById(id, "-password")
+        .then((user) => {
+            res.json(user);
+        })
+        .catch((error) => {
+            res.status(400).json(`Error: ${error}`);
+        });
 };
 module.exports.getUsers = async function(req, res) {
     try {
@@ -124,5 +122,5 @@ module.exports.Logout = async function(req, res) {
     res
         .cookie("token", "", { expire: new Date(0) })
         .status(202)
-        .json({ success: true, message: "User was logged out" });
+        .json("User was logged out");
 };

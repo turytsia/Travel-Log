@@ -1,60 +1,152 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
-//comps
-import Aside from "./components/Aside";
+//components
+import Tags from "./components/Tags";
+//images
 import ava from "./images/avatar_man.png";
 
-import http from "./services.js";
+import http, { getImageURL, reqUserById, reqBlogById } from "./services.js";
 
 //context
 import { Authorization } from "./App";
+
 export default function Blog({ props }) {
-  const authorizedUserContext = useContext(Authorization);
-  const [authorizedUser, setAuthorizedUser] = useState(null);
+  const authorizedUser = useContext(Authorization);
   const [blog, setBlog] = useState(null);
   const [author, setAuthor] = useState(null);
-  const [commentBody, setCommentBody] = useState("");
 
-  function getBlog() {
-    const id = props.match.params.id;
-    if (authorizedUserContext) setAuthorizedUser(authorizedUserContext);
-    http
-      .get(`/api/blog/${id}`)
-      .then((res) => {
-        setBlog(res.data.blog);
-        http
-          .get(`/api/auth/${res.data.blog.author}`)
-          .then((res) => {
-            setAuthor(res.data.user);
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
-  }
-
-  async function likeBlog() {
-    const id = props.match.params.id;
-    const { data } = await http.get(`/api/blog/${id}/like`);
-    if (data.success) {
-      setBlog(data.blog);
+  //repeats
+  async function likeBlog(id) {
+    try {
+      const { data } = await http.get(`/api/blog/${id}/like`);
+      if (data.success) {
+        setBlog(data.blog);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  }
-
-  async function postComment(e) {
-    e.preventDefault();
-    const id = props.match.params.id;
-    const { data } = await http.post(`/api/blog/${id}/comment`, {
-      commentBody,
-    });
-    if (data.success) {
-      setBlog(data.blog);
-      setCommentBody("");
-    }
+    return this;
   }
 
   useEffect(() => {
-    getBlog();
-  }, [authorizedUserContext]);
+    reqBlogById(props.match.params.id).then((blog) => {
+      setBlog(blog);
+      reqUserById(blog.author).then((author) => setAuthor(author));
+    });
+  }, [props.match.params.id]);
+
+  function BlogImages() {
+    return (
+      blog.images.length && (
+        <>
+          <h2 className="blog-subtitle">Images from travel</h2>
+          <div
+            className="blog-gallery"
+            style={{
+              gridTemplateRows: "1fr",
+              gridTemplateColumns: "1fr ",
+            }}
+          >
+            {blog.images.map((image) => (
+              <div
+                className="blog-img"
+                style={{
+                  backgroundImage: `url(${getImageURL(image)})`,
+                }}
+                key={image}
+              ></div>
+            ))}
+          </div>
+        </>
+      )
+    );
+  }
+
+  //comments component
+  function BlogComment() {
+    const [commentBody, setCommentBody] = useState("");
+    const id = blog._id;
+
+    async function postComment(e) {
+      e.preventDefault();
+      const { data } = await http.post(`/api/blog/${id}/comment`, {
+        commentBody,
+      });
+      if (data.success) {
+        setBlog(data.blog);
+        setCommentBody("");
+      }
+    }
+
+    function Comment({ comment }) {
+      const [avatar, setAvatar] = useState("");
+      const [name, setName] = useState("");
+
+      useEffect(() => {
+        reqUserById(comment.user).then((user) => {
+          setAvatar(user.ava);
+          setName(user.name);
+        });
+      }, [comment.user]);
+
+      return (
+        <div className="comments-item">
+          <div>
+            <div
+              className="comments-ava"
+              style={{ backgroundImage: `url(${avatar ? getImageURL(avatar) : ava})` }}
+            ></div>
+            <div className="comments-name">
+              <Link to={""}>{name}</Link>
+            </div>
+          </div>
+          <div className="comments-body">
+            <p className="comments-text">{comment.body}</p>
+          </div>
+          <span className="comments-btn">Reply</span>
+        </div>
+      );
+    }
+
+    function CommentList() {
+      return (
+        <div className="comments">
+          {blog.comments.map((comment, i) => (
+            <Comment key={i} comment={comment} />
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {authorizedUser._id && (
+          <form onSubmit={(e) => postComment(e)} className="blog-review">
+            <h2 className="blog-review-title">
+              {authorizedUser.name}, what do you think of this Blog?
+            </h2>
+
+            <textarea
+              value={commentBody}
+              onChange={(e) => setCommentBody(e.target.value)}
+              className="blog-review-textarea"
+              placeholder="This blog was ..."
+            ></textarea>
+            <button type="submit" className="blog-review-btn">
+              Send
+            </button>
+          </form>
+        )}
+
+        <h2 className="comments-title">
+          {blog.comments.length ? "Comments:" : "No comments yet..."}
+        </h2>
+
+        <CommentList />
+      </>
+    );
+  }
+
   return (
     <section className="blog">
       <div className="main-wrapper">
@@ -65,38 +157,20 @@ export default function Blog({ props }) {
               <div className="blog-type">Cheap</div>
             </div>
             <pre className="blog-text">{blog.body}</pre>
-            <h2 className="blog-subtitle">Images from travel</h2>
-            <div className="blog-gallery">
-              {blog.images.map((image) => (
-                <div
-                  className="blog-img"
-                  key={image}
-                  style={{
-                    backgroundImage: `url(/api/image/${image})`,
-                  }}
-                ></div>
-              ))}
-            </div>
+            <BlogImages />
             <div className="blog-cred">
               <h2 className="blog-price">
                 Money spent: <span>350$</span>
               </h2>
               <h2 className="blog-author">
-                Written by
+                Posted by
                 <Link to={`/user/${blog.author}`}>{author.name}</Link>
               </h2>
             </div>
-            <div className="blog-tags">
-              {blog.tags &&
-                blog.tags.map((tag, idx) => (
-                  <Link to={""} key={idx} className="tag-item">
-                    {tag}
-                  </Link>
-                ))}
-            </div>
+            <Tags tags={blog.tags} />
             <div className="blog-info">
               <div className="blog-options">
-                {authorizedUser._id === author._id && (
+                {author && authorizedUser._id === author._id && (
                   <Link
                     to={`/blog/editor/${blog._id}`}
                     className="blog-options-link"
@@ -106,56 +180,17 @@ export default function Blog({ props }) {
                   </Link>
                 )}
               </div>
-              <button onClick={() => likeBlog()} className="blog-rating">
+              <button
+                onClick={() => likeBlog(blog._id)}
+                className="blog-rating"
+              >
                 <i className="fas fa-thumbs-up"></i>
-                {blog.likes}
+                {blog.likes.length}
               </button>
             </div>
-
-            {authorizedUser && (
-              <form onSubmit={(e) => postComment(e)} className="blog-review">
-                <h2 className="blog-review-title">
-                  {authorizedUser.name}, what do you think of this Blog?
-                </h2>
-                <textarea
-                  value={commentBody}
-                  onChange={(e) => setCommentBody(e.target.value)}
-                  className="blog-review-textarea"
-                  placeholder="This blog was ..."
-                ></textarea>
-                <button type="submit" className="blog-review-btn">
-                  Send
-                </button>
-              </form>
-            )}
-
-            {blog.comments.length > 0 ? (
-              <h2 className="comments-title">Comments:</h2>
-            ) : (
-              <h2 className="comments-warning">No comments yet...</h2>
-            )}
-            {blog.comments.map((comment, i) => (
-              <div key={i} className="comments">
-                <div className="comments-item">
-                  <div>
-                    <div
-                      className="comments-ava"
-                      style={{ backgroundImage: `url(${ava})` }}
-                    ></div>
-                    <div className="comments-name">
-                      <Link to={""}>{comment.user.name}</Link>
-                    </div>
-                  </div>
-                  <div className="comments-body">
-                    <p className="comments-text">{comment.body}</p>
-                  </div>
-                  <span className="comments-btn">Reply</span>
-                </div>
-              </div>
-            ))}
+            <BlogComment />
           </div>
         )}
-        <Aside />
       </div>
     </section>
   );
