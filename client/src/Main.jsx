@@ -4,7 +4,7 @@ import Aside from "./components/Aside";
 import BlogList from "./components/BlogList";
 import Tags from "./components/Tags";
 
-import { reqBlogs } from "./services";
+import http, { reqBlogs } from "./services";
 
 export default function Main() {
   const [blogs, setBlogs] = useState(null);
@@ -54,13 +54,15 @@ export default function Main() {
   }
 
   useEffect(() => {
-    reqBlogs()
+    //reqBlogs()
+    http
+      .get(`/api/blog/all`)
       .then((data) => {
         setBlogs(data.blogs);
         setSearchResult(data.blogs);
         setTags(data.tags);
-        console.log("Here")
-        console.log(data)
+        console.log("Here");
+        console.log(data);
       })
       .catch((error) => console.log(error));
   }, []);
