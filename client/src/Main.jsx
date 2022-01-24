@@ -19,6 +19,7 @@ export default function Main() {
 
   //returns all the blogs on current page
   function getBlogs(page) {
+    if(!searchResult) return []
     return searchResult.slice(
       page * blogsPerPage,
       page * blogsPerPage + blogsPerPage
@@ -59,9 +60,6 @@ export default function Main() {
         setSearchResult(data.blogs);
         setTags(data.tags);
       })
-      .catch((error) => {
-        console.error(error);
-      });
   }, []);
 
   function BlogPager() {
