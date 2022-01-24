@@ -36,12 +36,9 @@ export default function Profile({ props }) {
     reqUserById(props.match.params.id).then((user) => {
       setUser(user);
       reqBlogs().then((data) => {
-        setBlogs(
-          data.blogs.filter((blog) => blog.author === user._id)
-        );
+        setBlogs(data.blogs.filter((blog) => blog.author === user._id));
       });
     });
-
   }, [props.match.params.id, authorizedUser]);
   return (
     <>
@@ -65,27 +62,31 @@ export default function Profile({ props }) {
               </div>
             )}
             <div className="profile-stats">
-              <div className="profile-followers">
-                <i className="fas fa-hiking"></i>
-                {user.followers.length} Followers
-              </div>
-              <div className="profile-subs">
-                <i className="fas fa-users"></i>
-                {user.following.length} Following
-              </div>
+              {user.followers && (
+                <div className="profile-followers">
+                  <i className="fas fa-hiking"></i>
+                  {user.followers.length} Followers
+                </div>
+              )}
+              {user.following && (
+                <div className="profile-subs">
+                  <i className="fas fa-users"></i>
+                  {user.following.length} Following
+                </div>
+              )}
             </div>
             <div className="profile-actions">
               {authorizedUser._id !== user._id ? (
                 <>
-                <h3
-                  onClick={() => followUser(user._id)}
-                  className="profile-actions-unfollow-btn"
-                >
-                  {user.followers.includes(authorizedUser._id)
-                    ? "Unfollow"
-                    : "Follow"}
-                </h3>
-              </>
+                  <h3
+                    onClick={() => followUser(user._id)}
+                    className="profile-actions-unfollow-btn"
+                  >
+                    {user.followers.includes(authorizedUser._id)
+                      ? "Unfollow"
+                      : "Follow"}
+                  </h3>
+                </>
               ) : (
                 <>
                   <Link
