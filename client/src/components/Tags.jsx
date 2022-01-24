@@ -4,6 +4,7 @@ export default function Tags({ tags, toggleTagSearch }) {
   function handleClick(tag) {
     if (toggleTagSearch) toggleTagSearch(tag);
   }
+  if(!tags) return null
   return tags.length ? (
     <div className="tag-list">
       {tags.map((tag, i) => (
