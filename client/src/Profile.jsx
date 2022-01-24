@@ -35,9 +35,11 @@ export default function Profile({ props }) {
   useEffect(() => {
     reqUserById(props.match.params.id).then((user) => {
       setUser(user);
-      reqBlogs().then((data) => {
-        setBlogs(data.blogs.filter((blog) => blog.author === user._id));
-      });
+      reqBlogs().then(
+        (data) =>
+          data.blogs &&
+          setBlogs(data.blogs.filter((blog) => blog.author === user._id))
+      );
     });
   }, [props.match.params.id, authorizedUser]);
   return (
