@@ -26,17 +26,18 @@ export function reqBlogById(id) {
     .catch((error) => error);
 }
 
-export function reqBlogs(filter = {}) {
+export function reqBlogs() {
+  console.log(`${CURRENT_URL}/api/blog/all`);
   return axios
     .get(`${CURRENT_URL}/api/blog/all`)
     .then(({ data }) => data)
     .catch((error) => error);
 }
 
-export function reqAuthorizedUser(){
-    return axios
+export function reqAuthorizedUser() {
+  return axios
     .get(`${CURRENT_URL}/api/private`)
-    .then(({data})=>data)
+    .then(({ data }) => data)
     .catch((error) => error);
 }
 

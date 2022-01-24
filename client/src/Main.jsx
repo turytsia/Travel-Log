@@ -54,10 +54,8 @@ export default function Main() {
   }
 
   useEffect(() => {
-    //reqBlogs()
-    http
-      .get(`/api/blog/all`)
-      .then(({data}) => {
+    reqBlogs()
+      .then(( data ) => {
         setBlogs(data.blogs);
         setSearchResult(data.blogs);
         setTags(data.tags);
