@@ -54,11 +54,14 @@ export default function Main() {
   }
 
   useEffect(() => {
-    reqBlogs().then((data) => {
-      setBlogs(data.blogs);
-      setSearchResult(data.blogs);
-      setTags(data.tags);
-    });
+    reqBlogs()
+      .then((data) => {
+        setBlogs(data.blogs);
+        setSearchResult(data.blogs);
+        setTags(data.tags);
+        console.log(data)
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   function BlogPager() {
