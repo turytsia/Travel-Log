@@ -75,36 +75,38 @@ export default function Profile({ props }) {
                 </div>
               )}
             </div>
-            <div className="profile-actions">
-              {authorizedUser._id !== user._id ? (
-                <>
-                  <h3
-                    onClick={() => followUser(user._id)}
-                    className="profile-actions-unfollow-btn"
-                  >
-                    {user.followers.includes(authorizedUser._id)
-                      ? "Unfollow"
-                      : "Follow"}
-                  </h3>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to={`/user/${authorizedUser._id}/settings`}
-                    className="profile-actions-settings-btn"
-                  >
-                    Account Settings
-                    <i className="fas fa-cog"></i>
-                  </Link>
-                  <h3
-                    onClick={() => signOut()}
-                    className="profile-actions-logout"
-                  >
-                    <i className="fas fa-sign-out-alt"></i>
-                  </h3>
-                </>
-              )}
-            </div>
+            {user.followers && (
+              <div className="profile-actions">
+                {authorizedUser._id !== user._id ? (
+                  <>
+                    <h3
+                      onClick={() => followUser(user._id)}
+                      className="profile-actions-unfollow-btn"
+                    >
+                      {user.followers.includes(authorizedUser._id)
+                        ? "Unfollow"
+                        : "Follow"}
+                    </h3>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to={`/user/${authorizedUser._id}/settings`}
+                      className="profile-actions-settings-btn"
+                    >
+                      Account Settings
+                      <i className="fas fa-cog"></i>
+                    </Link>
+                    <h3
+                      onClick={() => signOut()}
+                      className="profile-actions-logout"
+                    >
+                      <i className="fas fa-sign-out-alt"></i>
+                    </h3>
+                  </>
+                )}
+              </div>
+            )}
             <div className="profile-options">
               <Link to={"/user/editor"} className="profile-option">
                 <i className="fas fa-pencil-alt"></i>
