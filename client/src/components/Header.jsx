@@ -54,7 +54,7 @@ export default function Header() {
             <Link className="header-link" to={"/people"}>
               People
             </Link>
-            {isAuthorized._id ? (
+            {isAuthorized ? (
               <Link to={`/user/${isAuthorized._id}`}>
                 <i id="user_ico" className="fas fa-user"></i>
               </Link>
