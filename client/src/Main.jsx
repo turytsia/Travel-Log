@@ -57,7 +57,7 @@ export default function Main() {
     //reqBlogs()
     http
       .get(`/api/blog/all`)
-      .then((data) => {
+      .then(({data}) => {
         setBlogs(data.blogs);
         setSearchResult(data.blogs);
         setTags(data.tags);
