@@ -19,7 +19,7 @@ export default function Main() {
 
   //returns all the blogs on current page
   function getBlogs(page) {
-    if(!searchResult) return []
+    if (!searchResult) return [];
     return searchResult.slice(
       page * blogsPerPage,
       page * blogsPerPage + blogsPerPage
@@ -54,15 +54,15 @@ export default function Main() {
   }
 
   useEffect(() => {
-    reqBlogs()
-      .then((data) => {
-        setBlogs(data.blogs);
-        setSearchResult(data.blogs);
-        setTags(data.tags);
-      })
+    reqBlogs().then((data) => {
+      setBlogs(data.blogs);
+      setSearchResult(data.blogs);
+      setTags(data.tags);
+    });
   }, []);
 
   function BlogPager() {
+    if (!searchResult) return null;
     let pages = [];
     const pagesCount = searchResult.length / blogsPerPage;
 
@@ -103,7 +103,7 @@ export default function Main() {
           />
         </div>
         <div className="main-tag-container">
-        <Tags tags={tagSearch} toggleTagSearch={toggleTagSearch} />
+          <Tags tags={tagSearch} toggleTagSearch={toggleTagSearch} />
         </div>
       </form>
       <div className="main-wrapper">
