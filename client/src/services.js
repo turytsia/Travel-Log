@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const deployURL = "https://arcane-brushlands-47211.herokuapp.com/";
+const deployURL = "https://arcane-brushlands-47211.herokuapp.com";
 //const developURL = "http://localhost:5000";
 
 const CURRENT_URL = deployURL;
@@ -27,7 +27,6 @@ export function reqBlogById(id) {
 }
 
 export function reqBlogs() {
-  console.log(`${CURRENT_URL}/api/blog/all`);
   return axios
     .get(`${CURRENT_URL}/api/blog/all`)
     .then(({ data }) => data)
