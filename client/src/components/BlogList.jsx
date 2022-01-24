@@ -89,8 +89,6 @@ export default function BlogList({ blogs, toggleTagSearch }) {
     );
   }
 
-  console.log(blogs)
-
   // list
   return blogs ? (
     <div className="list">

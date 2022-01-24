@@ -59,6 +59,7 @@ export default function Main() {
         setBlogs(data.blogs);
         setSearchResult(data.blogs);
         setTags(data.tags);
+        console.log("Here")
         console.log(data)
       })
       .catch((error) => console.log(error));
