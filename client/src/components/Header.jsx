@@ -40,6 +40,8 @@ export default function Header() {
     };
   });
 
+  console.log(isAuthorized)
+
   return (
     <>
       <div className="header-nav" id="nav">
