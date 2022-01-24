@@ -11,7 +11,7 @@ export default function Header() {
     let link = document.getElementsByClassName("header-link");
     let ico = document.getElementById("user_ico");
 
-    if(!wall) return;
+    if (!wall) return;
 
     wall.style.transform = `translateY(${window.pageYOffset / 10}%)`;
     if (window.pageYOffset > 0) {
@@ -40,7 +40,7 @@ export default function Header() {
     };
   });
 
-  console.log(isAuthorized)
+  console.log(isAuthorized);
 
   return (
     <>
@@ -56,15 +56,16 @@ export default function Header() {
             <Link className="header-link" to={"/people"}>
               People
             </Link>
-            {isAuthorized ? (
-              <Link to={`/user/${isAuthorized._id}`}>
-                <i id="user_ico" className="fas fa-user"></i>
-              </Link>
-            ) : (
-              <Link className="header-link" to={"/auth/register"}>
-                Sign In
-              </Link>
-            )}
+            {isAuthorized &&
+              (isAuthorized._id ? (
+                <Link to={`/user/${isAuthorized._id}`}>
+                  <i id="user_ico" className="fas fa-user"></i>
+                </Link>
+              ) : (
+                <Link className="header-link" to={"/auth/register"}>
+                  Sign In
+                </Link>
+              ))}
           </div>
         </div>
       </div>
